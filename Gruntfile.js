@@ -1,12 +1,5 @@
 module.exports = function(grunt) {
 
-  // files to be minified and combined
-  var cssFiles = [
-    'app/css/main.css',
-    'app/css/normalize.css'
-  ];
-
-
   // this is where all the grunt configs will go
   grunt.initConfig({
     // read the package.json
@@ -15,46 +8,67 @@ module.exports = function(grunt) {
 
     // configuration for the cssmin task
     // note that this syntax and options can found on npm page of any grunt plugin/task
-
-    uglify: {
-      my_target: {
-        files: {
-          'dist/js/output.min.js': ['app/js/*.js']
-        }
+    clean: {
+      build: ['dist']
+    },
+    copy: {
+      dist: {
+        files: [{
+          dest: 'dist/',
+          src: ['**'],
+          cwd: 'app/',
+          expand: true
+        }]
       }
-    }, 
-
-    cssmin: {
-      combine: {
-        files: {
-          'dist/css/styles.css': ['app/css/main.css', 'app/css/normalize.css']
-        }
-      }
-    },    
-
+    },
     useminPrepare: {
-        html: 'app/index.html',
+        html: 'dist/index.html',
         options: {
-            dest: 'dist'
+            dirs: ['dist']
         }
     },
-
+    rev: {
+      img: {
+        options: {
+          algorithm: 'sha1',
+          length: 4
+        },
+        files: {
+          src: ['dist/**/*.{png,jpg,ico}']
+        }
+      },
+      jscss: {
+        options: {
+          algorithm: 'sha1',
+          length: 4
+        },
+        files: {
+          src: ['dist/**/*.{js,css}']
+        }
+      }
+    },
     usemin: {
         html: ['dist/*.html'],
+        css: ['dist/**/*.css']
     }
-
 
   }); // end of configuring the grunt task
 
   // Load the plugins
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-usemin');
+  grunt.loadNpmTasks('grunt-rev');
+
 
 
   // main build task
   //grunt.registerTask('default', ['cssmin','uglify', 'usemin']);
-  grunt.registerTask('default', ['usemin']);  
+  grunt.registerTask('default',
+    ['clean', 'copy', 'useminPrepare', 'concat', 'uglify', 'cssmin', 'rev:img', 'usemin:css', 'rev:jscss', 'usemin:html']);
 
 
 };
