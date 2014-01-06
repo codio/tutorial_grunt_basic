@@ -1,0 +1,26 @@
+{
+  "name": "grunt-tut",
+  "version": "0.0.0",
+  "description": "Codio Grunt tutorial",
+  "main": "Gruntfile.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "dependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-cssmin": "~0.7.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:fmay/tutorial_grunt_basic.git"
+  },
+  "author": "Freddy May",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/fmay/tutorial_grunt_basic/issues"
+  }
+}
