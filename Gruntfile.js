@@ -6,6 +6,7 @@ module.exports = function(grunt) {
     'app/css/normalize.css'
   ];
 
+
   // this is where all the grunt configs will go
   grunt.initConfig({
     // read the package.json
@@ -18,7 +19,7 @@ module.exports = function(grunt) {
     uglify: {
       my_target: {
         files: {
-          'dest/output.min.js': ['app/js/*.js']
+          'dist/js/output.min.js': ['app/js/*.js']
         }
       }
     }, 
@@ -26,19 +27,34 @@ module.exports = function(grunt) {
     cssmin: {
       combine: {
         files: {
-          'dest/css/styles.css': ['app/css/main.css', 'normailize.css']
+          'dist/css/styles.css': ['app/css/main.css', 'app/css/normalize.css']
         }
       }
-    }    
+    },    
+
+    useminPrepare: {
+        html: 'app/index.html',
+        options: {
+            dest: 'dist'
+        }
+    },
+
+    usemin: {
+        html: ['dist/*.html'],
+    }
+
 
   }); // end of configuring the grunt task
 
-  // Load the plugin that provides the "cssmin" task.
+  // Load the plugins
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-usemin');
 
-  // Default task(s).
-  grunt.registerTask('cssmin', ['cssmin']);
+
   // main build task
-  grunt.registerTask('default', ['cssmin']);
+  //grunt.registerTask('default', ['cssmin','uglify', 'usemin']);
+  grunt.registerTask('default', ['usemin']);  
+
 
 };
