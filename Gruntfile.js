@@ -20,7 +20,7 @@ module.exports = function(grunt) {
         
         // @annotation:snippet task-copy
         copy: {
-            dist: {
+            main: {
                 files: [{
                     dest: 'dist/',
                     src: ['**'],
@@ -34,9 +34,6 @@ module.exports = function(grunt) {
         // @annotation:snippet task-useminPrepare
         useminPrepare: {
             html: 'dist/index.html',
-            options: {
-                dirs: ['dist']
-            }
         },
         // @annotation:/snippet task-useminPrepare
         

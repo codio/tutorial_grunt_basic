@@ -54,7 +54,6 @@ Grunt is a task runner that runs operations on your files. Grunt tasks can be ap
 - **Rev** - static file revisioning using hashing, great for cache busting
 - **Usemin** - replaces references to non-optimized scripts or stylesheets within a set of HTML files (or any templates/views)
 
-
 ##Grunt Site
 You should visit the [Grunt Site](http://gruntjs.com) to get full details. There is also a [list of all publicly available Grunt Plugins](http://gruntjs.com/plugins).
 
@@ -80,6 +79,13 @@ Once these steps run, the `dist` folder will contain our production ready conten
 
 ![grunt tutorial source location](blog/tut-grunt-dist.png)
 
+@annotation:tour run
+#Running your Grunt tasks
+When you are ready to run your tasks (make sure you have read the README.md file for details on initializing your project within Codio or elsewhere) you simply enter `grunt` in your Console window.
+
+There is a lot of verbose output which tells you exactly what tasks were run and the order in which they were run.
+
+This output is useful for troubleshooting and, in our example, it shows you the auto-generated tasks created by the `useminPrepare` task.
 
 @annotation:tour gruntfile
 #Gruntfile.js
@@ -96,12 +102,12 @@ That's it.
 This section of code is where you define your tasks in detail. The following shows the [copy](https://npmjs.org/package/grunt-contrib-copy) task along with its parameters.
 
     copy: {                       // task name
-        dist: {                   // 
-            files: [{             // files to copy
+        main: {                   // sub-task name (can be anything)
+            files: [{             // file copying options
                 dest: 'dist/',    // name of the destination folder
-                src: ['**'],      // name of the
-                cwd: 'app/',      // points to the source root folder
-                expand: true      // folders and sub-folders
+                src: ['**'],      // location of the parent folder
+                cwd: 'app/',      // 'current working direct' within the src folder
+                expand: true      // process all folders and sub-folders
             }]
         }
     }
@@ -121,21 +127,20 @@ This removes files and folders from `dist` folder ready for the next operations.
 This copies files from the source folder to the destination folder. Once the copy has been done, all other tasks will operate on these copied files in the `dist` folder.
 
     copy: {                       // task name
-        dist: {                   // 
-            files: [{             // files to copy
+        main: {                   // sub-task name (can be anything)
+            files: [{             // file copying options
                 dest: 'dist/',    // name of the destination folder
-                src: ['**'],      // name of the
-                cwd: 'app/',      // points to the source root folder
-                expand: true      // folders and sub-folders
+                src: ['**'],      // location of the parent folder
+                cwd: 'app/',      // 'current working direct' within the src folder
+                expand: true      // process all folders and sub-folders
             }]
         }
     }
 
-
 @annotation:snippet task-useminPrepare
 For details on `usemin`, see [grunt-usemin](https://npmjs.org/package/grunt-usemin)
 
-`usemin` is a clever task (but hard to grasp initially) that takes file references and fixes them up after the referenced file names have changed. Such changes will occur as a result of cache-busting and concatentation.
+`usemin` is a clever, but complex, task that takes file references within files and then fixes them up after the referenced files names have changed by tasks such as cache-busting and concatentation.
 
 For example, our project's `index.html` references css and javascript files
 
@@ -149,13 +154,14 @@ For example, our project's `index.html` references css and javascript files
     <script src="js/main.js"></script>        
     <!-- endbuild -->
 
-After concatenation, the two CSS files (same for the JS files) will be concatenated and cache-busted to end up with a single file, something like
+After concatenation and cache-busting, the two CSS files and the two JS files will be concatenated and cache-busted to end up with 2  single files, something like
 
     abcd.optimized.css
+    efgh.optimized.js
     
 The `useminPrepare` task analyzes the files you point it to (in our project `dist/index.html`, in other words the freshly copied files) and then in the `options` parameter, we specify the destination folder.
 
-If you run `grunt prep` our Gruntfile only runs the clean, copy and useminPrepare tasks. If you look at the console output, you will see that `useminPrepare` is actually generating some tasks on the fly.
+If you run `grunt prep` our Gruntfile only runs the clean, copy and useminPrepare tasks. If you look at the console output, you will see that `useminPrepare` is actually generating some tasks on the fly. The same output is generated by `grunt` (runs the `default` tasks) along with the all the other tasks.
 
     concat: {
         generated: {
@@ -185,18 +191,18 @@ If you run `grunt prep` our Gruntfile only runs the clean, copy and useminPrepar
         }
     }
 
-These tasks are inserted into your Gruntfile for the duration of execution only. They will be run as soon as the actual `usemin` tasks is invoked.
+These tasks are inserted into your Gruntfile for the duration of execution only. They will be run as soon as the actual `usemin` task is invoked.
 
 You can see from the above output how `concat`, `uglify` and `cssmin` tasks will be executed when `usemin` is invoked.
 
-However, `usemin` also does something else. It fixes up all references to any files in the `index.html` file. We had
+The main responsibility of `usemin` is to fix up all references to any files in the `index.html` file. We had
 
     <!-- build:css css/optimized.css -->
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/main.css">        
     <!-- endbuild -->
     
-... which, after concatenation and cache-busting becomes
+... which, after concatenation and cache-busting becomes something like (hash value will vary)
 
     <link rel="stylesheet" href="css/ec54.optimized.css"/>
 
@@ -209,6 +215,12 @@ But, `usemin` also fixed up references in other files. For example, our `app/css
     background-image:url('../img/dcae.grunt.png');
 
 This then gets concatenated and cache-busted along with `normalize.css` into `abcd.optimized.css`. The same procedure runs on the js files.
+
+##Options
+We use following options (there are many more available) within the task
+
+-  `html` - the location of the root html file
+-  `options:dirs` - the folder to process
 
 @annotation:snippet task-rev
 For full details on `rev` see [grunt-rev](https://npmjs.org/package/grunt-rev)
@@ -225,11 +237,30 @@ We need to have the right sequence of execution as follows
 1. Now, `usemin:css` is run to fix up references to any file names references by the css.
 1. Next, we can cache-bust the css (and js) file with `rev:jscss`.
 1. Finally, we can fix up the references to the js and css files within `index.html`.
+There a parameters set to control the way the hashing is done
+
+    algorithm - the hashing algorithm used ('sha1', 'md5', 'sha256', 'sha512', etc.)
+    length - the number of characters the hash should return
+    files:src - the folder to search in along with any filters
+    
+Refer to [grunt-rev](https://npmjs.org/package/grunt-rev) for details.
 
 @annotation:snippet task-usemin
 For details on `usemin`, see [grunt-usemin](https://npmjs.org/package/grunt-usemin)
 
 Please refer to the `useminPrepare: {` task higher up the `Gruntfile.js` as well as as the `rev` task annotation, where this is all described in detail. 
+
+**IMPORTANT** : although `useminPrepare` prepares the `concat`, `uglify` and `cssmin` tasks, it does not ensure that they are executed. To ensure this, you should include them in `grunt.registerTask` at the bottom of `Gruntfile.js`. You can see them here 
+
+    grunt.registerTask('default', ['clean', 'copy', 'useminPrepare', 
+        'concat', 'uglify', 'cssmin', 'rev:img', 
+        'usemin:css', 'rev:jscss', 'usemin:html']);
+
+##Sub Tasks
+Because we want to be able to process the `index.html` and the css/js files at different points in the workflow, we have configured 2 subtasks, `html: ['dist/*.html']` and `css: ['dist/**/*.css']`.
+
+Each of these tasks specifies the folders and file types to operate on. You can see how `grunt.registerTask()` invokes `usemin:css` and `usemin:html` at separate points in the workflow.
+    
 
 @annotation:tour load-tasks
 #Load Grunt Modules
