@@ -1,0 +1,18 @@
+/*  ==========================================================================
+    CODIO GRUNT TUTORIAL
+    FREDDY MAY / CODIO 
+    A few basic styles to see what grunt does    
+    ========================================================================== */
+
+body {
+    color: #444444;
+    font-size: 30px;
+    line-height: 1.0;
+    background-image:url('../img/dcae.grunt.png');
+}
+
+h1 {
+    font-size: 50px;
+    color: #dd4949;
+}
+
