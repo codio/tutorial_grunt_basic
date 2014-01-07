@@ -43,6 +43,7 @@ Select `Tools->Annotations Tour` to start the guided tour.
 
 
 @annotation:tour start
+#Introduction
 Grunt will be known to many developers but if you have not used it before, we've put together a detailed Grunt tutorial that shows a typical use case.
 
 Grunt is a task runner that runs operations on your files. Grunt tasks can be applied to all of your front and back end code. Here are just a few of the many tasks that have been built by the Grunt community.
@@ -81,6 +82,7 @@ Once these steps run, the `dist` folder will contain our production ready conten
 
 
 @annotation:tour gruntfile
+#Gruntfile.js
 This is the magical Grunt file. All Grunt related tasks are defined here. There are three main areas you will need to configure
 
 1. The tasks themselves (inside the JSON structure)
@@ -90,6 +92,7 @@ This is the magical Grunt file. All Grunt related tasks are defined here. There 
 That's it.
 
 @annotation:tour grunt-tasks
+#Defined Grunt Tasks
 This section of code is where you define your tasks in detail. The following shows the [copy](https://npmjs.org/package/grunt-contrib-copy) task along with its parameters.
 
     copy: {                       // task name
@@ -152,10 +155,87 @@ After concatenation, the two CSS files (same for the JS files) will be concatena
     
 The `useminPrepare` task analyzes the files you point it to (in our project `dist/index.html`, in other words the freshly copied files) and then in the `options` parameter, we specify the destination folder.
 
+If you run `grunt prep` our Gruntfile only runs the clean, copy and useminPrepare tasks. If you look at the console output, you will see that `useminPrepare` is actually generating some tasks on the fly.
 
+    concat: {
+        generated: {
+            files: [{
+                dest: '.tmp/concat/css/optimized.css',
+                src: ['dist/css/normalize.css', 'dist/css/main.css']
+            }, {
+                dest: '.tmp/concat/js/optimized.js',
+                src: ['dist/js/plugins.js', 'dist/js/main.js']
+            }]
+        }
+    }
+    uglify: {
+        generated: {
+            files: [{
+                dest: 'dist/js/optimized.js',
+                src: ['.tmp/concat/js/optimized.js']
+            }]
+        }
+    }
+    cssmin: {
+        generated: {
+            files: [{
+                dest: 'dist/css/optimized.css',
+                src: ['.tmp/concat/css/optimized.css']
+            }]
+        }
+    }
+
+These tasks are inserted into your Gruntfile for the duration of execution only. They will be run as soon as the actual `usemin` tasks is invoked.
+
+You can see from the above output how `concat`, `uglify` and `cssmin` tasks will be executed when `usemin` is invoked.
+
+However, `usemin` also does something else. It fixes up all references to any files in the `index.html` file. We had
+
+    <!-- build:css css/optimized.css -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">        
+    <!-- endbuild -->
+    
+... which, after concatenation and cache-busting becomes
+
+    <link rel="stylesheet" href="css/ec54.optimized.css"/>
+
+But, `usemin` also fixed up references in other files. For example, our `app/css/main.css` file contains the following reference 
+
+    background-image:url('../img/grunt.png');
+    
+... which gets fixed up (in `dist/css/main.css`) to 
+
+    background-image:url('../img/dcae.grunt.png');
+
+This then gets concatenated and cache-busted along with `normalize.css` into `abcd.optimized.css`. The same procedure runs on the js files.
+
+@annotation:snippet task-rev
+For full details on `rev` see [grunt-rev](https://npmjs.org/package/grunt-rev)
+
+This task generates hashes that are prepended to file names in order to ensure any previous files are not served up from the browser's cache. This is know as 'cache busting'. Whenever this task is run, new hashes will be generated.
+
+You will see that there are two sub-tasks for this task, `img` and `jscss`. Due to the fact that our task workflow requires that images are fixed up before js and css files, we have defined these two sub-tasks. If you look at the end of `Gruntfile.js`, you will see that our operation invoked the tasks as follows (extract)
+
+    ...., 'rev:img', 'usemin:css', 'rev:jscss', 'usemin:html' ....
+    
+We need to have the right sequence of execution as follows
+
+1. We first cache-bust the image names with `rev:img` as our css files may reference these. 
+1. Now, `usemin:css` is run to fix up references to any file names references by the css.
+1. Next, we can cache-bust the css (and js) file with `rev:jscss`.
+1. Finally, we can fix up the references to the js and css files within `index.html`.
+
+@annotation:snippet task-usemin
+For details on `usemin`, see [grunt-usemin](https://npmjs.org/package/grunt-usemin)
+
+Please refer to the `useminPrepare: {` task higher up the `Gruntfile.js` as well as as the `rev` task annotation, where this is all described in detail. 
 
 @annotation:tour load-tasks
-You need to explicitly load each NPM module that handles a task. 
+#Load Grunt Modules
+You need to explicitly load each NPM module that handles a task. You can look up NPM modules in [http://gruntjs.com/plugins](http://gruntjs.com/plugins).
+
+You will need to add this manually to your Gruntfile.
 
 @annotation:tour register-tasks
 This is where you register one or more tasks with Grunt. The format is

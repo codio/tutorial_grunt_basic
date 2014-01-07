@@ -16,6 +16,7 @@ module.exports = function(grunt) {
         clean: {
             build: ['dist']
         },
+        // @annotation:/snippet task-clean
         
         // @annotation:snippet task-copy
         copy: {
@@ -28,6 +29,8 @@ module.exports = function(grunt) {
                 }]
             }
         },
+        // @annotation:/snippet task-copy
+        
         // @annotation:snippet task-useminPrepare
         useminPrepare: {
             html: 'dist/index.html',
@@ -35,7 +38,9 @@ module.exports = function(grunt) {
                 dirs: ['dist']
             }
         },
+        // @annotation:/snippet task-useminPrepare
         
+        // @annotation:snippet task-rev
         rev: {
             img: {
                 options: {
@@ -56,10 +61,14 @@ module.exports = function(grunt) {
                 }
             }
         },
+        // @annotation:/snippet task-rev
+        
+        // @annotation:snippet task-usemin 
         usemin: {
             html: ['dist/*.html'],
             css: ['dist/**/*.css']
         }
+        // @annotation:/snippet task-usemin
         
         // *********************************************
         // and this is the end of the task block *
@@ -80,7 +89,9 @@ module.exports = function(grunt) {
     
     // @annotation:tour register-tasks
     grunt.registerTask('default', ['clean', 'copy', 'useminPrepare', 'concat', 'uglify', 'cssmin', 'rev:img', 'usemin:css', 'rev:jscss', 'usemin:html']);
-    grunt.registerTask('prep', ['clean', 'copy', 'ÌuseminPrepare']);
+    grunt.registerTask('prep', ['clean', 'copy', 'useminPrepare']);
     // @annotation:/tour register-tasks
 
 };
+
+// @annotation:/tour gruntfile
