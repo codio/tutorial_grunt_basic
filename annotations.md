@@ -42,7 +42,7 @@ This is where the magic happens. All build tasks are contained within this file 
 Select `Tools->Annotations Tour` to start the guided tour.
 
 
-@annotation:tour start
+@annotation:tour intro
 #Introduction
 Grunt will be known to many developers but if you have not used it before, we've put together a detailed Grunt tutorial that shows a typical use case.
 
@@ -52,40 +52,34 @@ Grunt is a task runner that runs operations on your files. Grunt tasks can be ap
 - **Concat** - joins js and css files into a single file to speed up page load
 - **Copy** - copy files from a source location to a destination location
 - **Rev** - static file revisioning using hashing, great for cache busting
-- **Usemin** - replaces references to non-optimized scripts or stylesheets within a set of HTML files (or any templates/views)
+- **Usemin** - fixes up references to .js and .css files within a set of HTML files (or any templates/views), once those .js and .css files have been concatenated and/or cache-busted.
 
+Use the navigation buttons at the top to move through the tour.
+
+@annotation:tour grunt-site
 ##Grunt Site
-You should visit the [Grunt Site](http://gruntjs.com) to get full details. There is also a [list of all publicly available Grunt Plugins](http://gruntjs.com/plugins).
+You should visit the [Grunt Site](http://gruntjs.com) to get a comprehensive overview of Grunt. There is also a [list of all publicly available Grunt Plugins](http://gruntjs.com/plugins).
 
+@annotation:tour use-case
 ##Our Use Case
-We take a very simple HTML5 boilerplate type application and perform the following tasks to prepare it for production. The site has the following structure
+We take a very simple HTML5 boilerplate type application and perform the following tasks to prepare it for production.
 
-![grunt tutorial source location](blog/tut-grunt-folders.png)
+Take a look at the folder structure in the tree on the left.
 
-The `app` folder is where all our source content goes. Once the build task has run, the following steps are run. Feel free to click on the task names to see the Grunt task modules described in the npm site.
+The `src` folder is where all our source content goes. Once the build task has run, the following steps are run. Feel free to click on the task names to see the Grunt task modules described in the npm site.
 
-1. [clean](https://npmjs.org/package/grunt-contrib-clean) - this cleans the contents of the `dist` folder where our production content is written to by Grunt
-1. [copy](https://npmjs.org/package/grunt-contrib-copy) - we copy the entire contents of the `app` folder into the `dist` folder ready for processing
-1. [useminPrepare](https://npmjs.org/package/grunt-usemin) - this is the step that requires most understanding. I'll explain it in more detail below so as not to make this summary too messy. It analyzes your project ready for concatenation, uglification and minification and will auto generate these tasks.
+1. [clean](https://npmjs.org/package/grunt-contrib-clean) - this empties the contents of the `dist` folder where our production content is written to by Grunt
+1. [copy](https://npmjs.org/package/grunt-contrib-copy) - we copy the entire contents of the `src` folder into the `dist` folder ready for processing
+1. [useminPrepare](https://npmjs.org/package/grunt-usemin) - this is the step that requires most understanding. I'll explain it in detail in the Tasks section so as not to make this summary too messy. In summary, it analyzes your project ready for concatenation, uglification and minification and will auto generate these tasks.
 1. [concat](https://npmjs.org/package/grunt-contrib-concat) - we want to concatenate all `.js` and `.css` files into 2 individual files so that the site loads faster.
 1. [uglify]() - minifies `.js` files
 1. [cssmin](https://npmjs.org/package/grunt-contrib-cssmin) - minifies `.css` files
 1. [rev (images)](https://npmjs.org/package/grunt-rev) - cache busting of images by prefixing file names with a hash to make them unique.
-1. [usemin (css)](https://npmjs.org/package/grunt-usemin) - we now fix up references within our css files to any images, bearing in mind that the above image cache-busting task will have changed image file names. More on this below.
+1. [usemin (css)](https://npmjs.org/package/grunt-usemin) - we now fix up references within our css files to any images, bearing in mind that the above image cache-busting task will have changed image file names. More on this later.
 1. [rev (js and css)](https://npmjs.org/package/grunt-rev) - now that the `.css` and `.js` files have been minified and concatenated, we will cache-bust them, too.
 1. [usemin (html)](https://npmjs.org/package/grunt-usemin) - the final step is to fix up the references within our `index.html` file to `.js` and `.css` files, bearing in mind that the concatenation and cache-busting tasks will have changed their file names.
 
 Once these steps run, the `dist` folder will contain our production ready content ready for deployment.
-
-![grunt tutorial source location](blog/tut-grunt-dist.png)
-
-@annotation:tour run
-#Running your Grunt tasks
-When you are ready to run your tasks (make sure you have read the README.md file for details on initializing your project within Codio or elsewhere) you simply enter `grunt` in your Console window.
-
-There is a lot of verbose output which tells you exactly what tasks were run and the order in which they were run.
-
-This output is useful for troubleshooting and, in our example, it shows you the auto-generated tasks created by the `useminPrepare` task.
 
 @annotation:tour gruntfile
 #Gruntfile.js
@@ -95,7 +89,53 @@ This is the magical Grunt file. All Grunt related tasks are defined here. There 
 1. Load the NPM modules associated with each tasks
 1. Configure task names by providing a task name along with the associated task you wish to run. 
 
-That's it.
+To see these 3 main components of the file, use the navigation buttons at the top of this panel.
+
+###A Basic Grunt file
+
+    module.exports = function(grunt) {
+    
+        grunt.initConfig({
+    
+            // This line is required and reads in package.json
+            // which is present in the root of your project
+            pkg: grunt.file.readJSON('package.json'),
+    
+            // User can customize everything starting here  
+    
+            // 'clean' tasks
+            clean: {
+                build: ['dist']
+            },
+    
+            // 'copy' task
+            copy: {
+                main: {
+                    files: [{
+                        dest: 'dist/',
+                        src: ['**'],
+                        cwd: 'src/',
+                        expand: true
+                    }]
+                }
+            }
+            
+            // .. and this is the end of the task block
+                      
+        });
+        
+        // Each task has its module loaded here
+        grunt.loadNpmTasks('grunt-contrib-clean');
+        grunt.loadNpmTasks('grunt-contrib-copy');
+        
+        // And here we register collections of tasks together
+        // 'default' tasks will run when you run grunt without a parameter
+        grunt.registerTask('default', ['clean', 'copy']);
+        // Other operations can be defined as well
+        grunt.registerTask('prep', ['clean']);
+    
+    };
+
 
 @annotation:tour grunt-tasks
 #Defined Grunt Tasks
@@ -112,11 +152,13 @@ This section of code is where you define your tasks in detail. The following sho
         }
     }
 
+###Details on each Task
 Each task can be examined in more detail by clicking on the blue icon in the gutter.
 
-One thing you will notice if you examine the task list is that there are no specific tasks for `concat`, `cssmin` and `uglify` yet these tasks are actually being performed. This is because `usemin` is performing some magic in the background.
+###Usemin - a minor headfuck
+One thing you will notice if you examine the task list is that there are no specific tasks for `concat`, `cssmin` and `uglify` yet these tasks are actually being invoked. 
 
-For an explanation of how this works, click on the blue icon on the `useminPrepare` line.
+This is because `usemin` is performing some magic in the background. Click on the blue icon on the `useminPrepare` line for more details.
 
 @annotation:snippet task-clean
 For details on `clean`, see [grunt-clean](https://npmjs.org/package/grunt-clean)
@@ -278,3 +320,11 @@ You can specify more than one `task_name` as shown in this example, where we hav
 `grunt` - runs the `default` operation.
 `grunt prep` - runs the `prep` operation.
 
+
+@annotation:tour run
+#Running your Grunt tasks
+When you are ready to run your tasks (make sure you have read the README.md file for details on initializing your project within Codio or elsewhere) you simply enter `grunt` in your Console window.
+
+There is a lot of verbose output which tells you exactly what tasks were run and the order in which they were run.
+
+This output is useful for troubleshooting and, in our example, it shows you the auto-generated tasks created by the `useminPrepare` task.
