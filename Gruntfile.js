@@ -5,6 +5,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
 
         pkg: grunt.file.readJSON('package.json'),
+        
         // **********************************************
         // User can customize everything starting here  *
         // each entry in this JSON structure is a tasks *
@@ -85,7 +86,9 @@ module.exports = function(grunt) {
     // @annotation:/tour load-tasks
     
     // @annotation:tour register-tasks
-    grunt.registerTask('default', ['clean', 'copy', 'useminPrepare', 'concat', 'uglify', 'cssmin', 'rev:img', 'usemin:css', 'rev:jscss', 'usemin:html']);
+    grunt.registerTask('default', ['clean', 'copy', 'useminPrepare', 
+       'concat', 'uglify', 'cssmin', 'rev:img', 
+       'usemin:css', 'rev:jscss', 'usemin:html']);
     grunt.registerTask('prep', ['clean', 'copy', 'useminPrepare']);
     // @annotation:/tour register-tasks
 
