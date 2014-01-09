@@ -68,14 +68,18 @@ module.exports = function(grunt) {
         },
         // @annotation:/snippet task-usemin
         
-        lineremover: {
-            customExclude: {
-              files: {
-                'dist/**/*.*':'dist/**/*.*'
-              },
-              options: {
-                inclusionPattern: '@annotation'
-              }
+        htmlmin: {                                     
+            dist: {                                      
+                options: {                                 
+                    removeComments: true,
+                },
+                files: [{                                                                                                                                                                                                                                                               
+                    dest: 'dist/',
+                    src: '**/*.html',
+                    cwd: 'src/',
+                    dot: false,
+                    expand: true                                                                                                                                                                                                        
+                }]                  
             }
         }
 
@@ -92,15 +96,15 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-htmlmin');    
     grunt.loadNpmTasks('grunt-usemin');
     grunt.loadNpmTasks('grunt-rev');
-    grunt.loadNpmTasks('grunt-line-remover');
     // @annotation:/tour load-tasks
     
     // @annotation:tour register-tasks
     grunt.registerTask('default', ['clean', 'copy', 'useminPrepare', 
        'concat', 'uglify', 'cssmin', 'rev:img', 
-       'usemin:css', 'rev:jscss', 'usemin:html', 'lineremover']);
+       'usemin:css', 'rev:jscss', 'usemin:html', 'htmlmin']);
     grunt.registerTask('prep', ['clean', 'copy', 'useminPrepare']);
     // @annotation:/tour register-tasks
 
