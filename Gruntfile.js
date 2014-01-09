@@ -65,9 +65,20 @@ module.exports = function(grunt) {
         usemin: {
             html: ['dist/*.html'],
             css: ['dist/**/*.css']
-        }
+        },
         // @annotation:/snippet task-usemin
         
+        lineremover: {
+            customExclude: {
+              files: {
+                'dist/**/*.*':'dist/**/*.*'
+              },
+              options: {
+                inclusionPattern: '@annotation'
+              }
+            }
+        }
+
         // *********************************************
         // and this is the end of the task block *
         // *********************************************    
@@ -83,12 +94,13 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-usemin');
     grunt.loadNpmTasks('grunt-rev');
+    grunt.loadNpmTasks('grunt-line-remover');
     // @annotation:/tour load-tasks
     
     // @annotation:tour register-tasks
     grunt.registerTask('default', ['clean', 'copy', 'useminPrepare', 
        'concat', 'uglify', 'cssmin', 'rev:img', 
-       'usemin:css', 'rev:jscss', 'usemin:html']);
+       'usemin:css', 'rev:jscss', 'usemin:html', 'lineremover']);
     grunt.registerTask('prep', ['clean', 'copy', 'useminPrepare']);
     // @annotation:/tour register-tasks
 
