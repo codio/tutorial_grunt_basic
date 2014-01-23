@@ -5,14 +5,15 @@ This tutorial is designed to give a comprehensive overview of Grunt. It comes wi
 This Tutorial uses Codio Annotations, which gives you two ways of getting tutored
 
 1. Wherever you see a blue icon in the file tree or on a line of code (take a look at `Gruntfile.js`) you can click on it to get information
-1. Click on [`Tools->Annotations`](https://codio.com/codio/grunt-tutorial/tour) to get a guided tour.
+1. Click on [`Tools->Annotations Tour`](https://codio.com/codio/grunt-tutorial/tour) to get a guided tour.
 
 ##Running the tutorial within Codio
 This project is ready to run in Codio. All you need to do is the following
 
 1. Create a free account with Codio
 1. Fork this project from Project->Fork in the menu
-1. From the project console, type `npm install` which will install the necessary modules for our Grunt tasks.
+1. From the project console, type `npm install` which will install the necessary modules for our Grunt tasks (all dependencies found in `package.json` will get installed)
+1. Then install `npm install -g grunt-cli` to get the Grunt command line interface tools.
 
 You can now view the site
 
