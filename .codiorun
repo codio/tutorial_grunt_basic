@@ -1,6 +1,0 @@
-{
-    "default": "Grunt",
-    "commands": {
-        "Grunt" : "grunt"
-    }
-}

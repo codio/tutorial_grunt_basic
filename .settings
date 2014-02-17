@@ -1,5 +1,6 @@
 [editor]
 ; enter your editor preferences here...
+wrap=true
 
 [code-beautifier]
 ; enter your code-beautifier preferences here...
