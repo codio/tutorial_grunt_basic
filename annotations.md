@@ -4,7 +4,7 @@ This is where our source content is located. Grunt's `copy` task will copy the e
 
 @annotation:file dist
 #Destination folder
-This is where Grunt will write all of its output. Compare some of the files in the `dist` folder with their counterparts in the `src` folder. You can see that many files are cache-busted (file names are prefixed with a has value). You can also see that the CSS (and JS) folder contains a file called `abcd.optimized.js` which conained minified and concatenated contents of the source files.
+This is where Grunt will write all of its output. Compare some of the files in the `dist` folder with their counterparts in the `src` folder. You can see that many files are cache-busted (file names are prefixed with a has value). You can also see that the CSS (and JS) folder contains a file called `abcd.optimized.js` which contains minified and concatenated contents of the source files.
 
 Although the original files are still there, they are not actually used in production.
 
@@ -24,7 +24,7 @@ This contains some interesting stuff. You will see the following code within it 
     <script src="js/main.js"></script>        
     <!-- endbuild -->
         
-The `<!-- build:css css/optimized.css -->` comment is used by `usemin` so it knows where to fix up references to concatenated and cache-busted files. If you look at `indez.html` within the `dist` folder, you will see the generated references, that look something like this
+The `<!-- build:css css/optimized.css -->` comment is used by `usemin` so it knows where to fix up references to concatenated and cache-busted files. If you look at `index.html` within the `dist` folder, you will see the generated references, that look something like this
 
     <link rel="stylesheet" href="css/ec54.optimized.css"/>
     <script src="js/49ee.optimized.js"></script>
@@ -48,7 +48,7 @@ Look at the same build folder `dist/css` and you will see a file call `xxxx.opti
 
 Now compare the `src/index.html` with `dist/index.html` and you will see how the reference has been fixed up.
 
-This fixing up is managed by the `usemin` tasks. You can read about this by opening `Gruntfile.js` and then clickin on the blue icon on the `useminPrepare` code line.
+This fixing up is managed by the `usemin` tasks. You can read about this by opening `Gruntfile.js` and then clicking on the blue icon on the `useminPrepare` code line.
 
 @annotation:file src/js
 #JS file concatenation & cache-busting
@@ -58,7 +58,7 @@ Look at the same build folder `dist/js` and you will see a file call `xxxx.optim
 
 Now compare the `src/index.html` with `dist/index.html` and you will see how the reference has been fixed up.
 
-This fixing up is managed by the `usemin` tasks. You can read about this by opening `Gruntfile.js` and then clickin on the blue icon on the `useminPrepare` code line.
+This fixing up is managed by the `usemin` tasks. You can read about this by opening `Gruntfile.js` and then clicking on the blue icon on the `useminPrepare` code line.
 
 @annotation:file Gruntfile.js
 #The Grunt file
@@ -68,7 +68,7 @@ Select `Tools->Annotations Tour` to start the guided tour.
 
 @annotation:snippet fixup
 #Fixing up references
-You will see here that there are references to 2 .js files and 2 .css files. Our Grunt operation will concatenate and cache-bust these 2 sets of files. Once this has been done, we wil end up with a new .js file `hash.optimized.css` and `hash.optimized.js`.
+You will see here that there are references to 2 .js files and 2 .css files. Our Grunt operation will concatenate and cache-bust these 2 sets of files. Once this has been done, we will end up with a new .js file `hash.optimized.css` and `hash.optimized.js`.
 
 However, this means that the references in this `index.html` file will be invalid. The good news is that `usemin` Grunt task will update these references in the `dist` folder. 
 
