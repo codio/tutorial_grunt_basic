@@ -84,7 +84,7 @@ Take a look in the `dist/img` folder and you'll see the new, cache-busted image 
 
 The `rev` task in `Gruntfile.js` is responsible for cache-busting.
 
-@annotation:tour intro
+@annotation:tour
 #Introduction
 Grunt will be known to many developers but if you have not used it before, we've put together a detailed Grunt tutorial that shows a typical use case.
 
@@ -98,17 +98,43 @@ Grunt is a task runner that runs operations on your files. Grunt tasks can be ap
 
 Use the navigation buttons at the top to move through the tour.
 
-@annotation:tour grunt-site
 ##Grunt Site
 You should visit the [Grunt Site](http://gruntjs.com) to get a comprehensive overview of Grunt. There is also a [list of all publicly available Grunt Plugins](http://gruntjs.com/plugins).
+
+@annotation:tour
+#Getting stuff installed
+The first thing we need to do is to install the Grunt command line tool and then install Grunt itself.
+
+Open up a terminal tab from the Tools->Terminal menu then enter these two commands
+
+    npm install -g grunt-cli
+    npm install
+
+`npm` is the Node Package Manager, which comes preinstalled on your Codio Box. 
+
+Running `npm install` checks the `package.json` file and then installs all the packages your project needs into the `node_module` folder.
+
+If you look in the file tree on the left, you should now see this folder.
+
+@annotation:tour
+#About the Codio Tutorial
+
+##Navigating through the tutorial
+You can use the navigation buttons at the top of this page to move from one section to the next. Where it references code snippets (which happens in a moment) you will see the page split.
+
+##Exploring the file tree
+Wherever you see a blue 'i' icon in the filetree, you can click on it and it will show you some contextual information.
+
+![tree](tree.png)
+
+##Creating your own Tutorials
+You can easily create your own tutorials using Codio. [Click here](https://codio.com/s/docs/annotations/) to find out how.
 
 @annotation:tour use-case
 ##Our Use Case
 We take a very simple HTML5 boilerplate type application and perform the following tasks to prepare it for production.
 
-Take a look at the folder structure in the tree on the left.
-
-The `src` folder is where all our source content goes. Once the build task has run, the following steps are run. Feel free to click on the task names to see the Grunt task modules described in the npm site.
+You can click on the task names below to see the Grunt task modules described in the npm site. You will find these tasks referred to in `gruntfile.js` which we will look at in the next section.
 
 1. [clean](https://npmjs.org/package/grunt-contrib-clean) - this empties the contents of the `dist` folder where our production content is written to by Grunt
 1. [copy](https://npmjs.org/package/grunt-contrib-copy) - we copy the entire contents of the `src` folder into the `dist` folder ready for processing
@@ -128,10 +154,10 @@ Once these steps run, the `dist` folder will contain our production ready conten
 This is the magical Grunt file. All Grunt related tasks are defined here. There are three main areas you will need to configure
 
 1. The tasks themselves (inside the JSON structure)
-1. Load the NPM modules associated with each tasks
+1. Loading the NPM modules associated with each tasks
 1. Configure task names by providing a task name along with the associated task you wish to run. 
 
-To see these 3 main components of the file, use the navigation buttons at the top of this panel.
+We'll now examine these 3 things.
 
 ###A Basic Grunt file
 
@@ -181,7 +207,7 @@ To see these 3 main components of the file, use the navigation buttons at the to
 
 @annotation:tour grunt-tasks
 #Defined Grunt Tasks
-This section of code is where you define your tasks in detail. The following shows the [copy](https://npmjs.org/package/grunt-contrib-copy) task along with its parameters.
+The large highlighted section of code on the left is where you define your tasks in detail. The following shows the [copy](https://npmjs.org/package/grunt-contrib-copy) task along with its parameters.
 
     copy: {                       // task name
         main: {                   // sub-task name (can be anything)
@@ -197,7 +223,7 @@ This section of code is where you define your tasks in detail. The following sho
 ###Details on each Task
 Each task can be examined in more detail by clicking on the blue icon in the gutter.
 
-###Usemin - a minor headfuck
+###Usemin - a minor headf***
 One thing you will notice if you examine the task list is that there are no specific tasks for `concat`, `cssmin` and `uglify` yet these tasks are actually being invoked. 
 
 This is because `usemin` is performing some magic in the background. Click on the blue icon on the `useminPrepare` line for more details.
@@ -224,7 +250,7 @@ This copies files from the source folder to the destination folder. Once the cop
 @annotation:snippet task-useminPrepare
 For details on `usemin`, see [grunt-usemin](https://npmjs.org/package/grunt-usemin)
 
-`usemin` is a clever, but complex, task that takes file references within files and then fixes them up after the referenced files names have changed by tasks such as cache-busting and concatentation.
+`usemin` is a clever, but complex, task that takes file references within files and then fixes them up after the referenced files names have modified by Grunt tasks such as cache-busting and concatentation.
 
 For example, our project's `index.html` references css and javascript files
 
@@ -350,22 +376,24 @@ Each of these tasks specifies the folders and file types to operate on. You can 
 #Load Grunt Modules
 You need to explicitly load each NPM module that handles a task. You can look up NPM modules in [http://gruntjs.com/plugins](http://gruntjs.com/plugins).
 
-You will need to add this manually to your Gruntfile.
-
 @annotation:tour register-tasks
-This is where you register one or more tasks with Grunt. The format is
+This is where you register one or more tasks with Grunt so they can be called from the command line. The format is
 
     grunt.registerTask('operation_name', ['task_1', 'task_2', ... , 'task_n']);
     
-You can specify more than one `task_name` as shown in this example, where we have defined `default` and `prep`. You can then run your task with 
+You can specify more than one `task_name` as shown in this example, where we have defined `default` and `prep`. 
 
-`grunt` - runs the `default` operation.
-`grunt prep` - runs the `prep` operation.
+Now, we can run the following tasks from the command line 
+
+`grunt` (with no second parmater) runs the 'default' registered task 
+ `grunt prep` runs the 'prep' registered task.
 
 
 @annotation:tour run
 #Running your Grunt tasks
-When you are ready to run your tasks (make sure you have read the README.md file for details on initializing your project within Codio or elsewhere) you simply enter `grunt` in your Console window.
+Now, you're ready to run your Grunt task. 
+
+Enter `grunt` in your terminal window.
 
 There is a lot of verbose output which tells you exactly what tasks were run and the order in which they were run.
 

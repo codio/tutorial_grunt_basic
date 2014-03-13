@@ -1,0 +1,14 @@
+{
+// Configure your Run and Preview buttons here.
+
+// Run button configuration
+  "commands": {
+        "Grunt": "grunt"
+  },
+
+// Preview button configuration
+  "preview": {
+        "Source index.html": "https://{{domain}}/src/index.html",
+        "Dist index.html": "https://{{domain}}//dist/index.html"
+  }
+}
