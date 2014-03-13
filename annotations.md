@@ -389,7 +389,7 @@ Now, we can run the following tasks from the command line
  `grunt prep` runs the 'prep' registered task.
 
 
-@annotation:tour run
+@annotation:tour
 #Running your Grunt tasks
 Now, you're ready to run your Grunt task. 
 
