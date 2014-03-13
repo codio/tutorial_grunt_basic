@@ -398,3 +398,16 @@ Enter `grunt` in your terminal window.
 There is a lot of verbose output which tells you exactly what tasks were run and the order in which they were run.
 
 This output is useful for troubleshooting and, in our example, it shows you the auto-generated tasks created by the `useminPrepare` task.
+
+@annotation:tour
+##Final things
+You can run the demo site in the following ways
+
+- Open up `src/index.html` in the file tree and then right click and select 'Preview static'.
+- You can do the same from the `dist` folder.
+- we've also included options in the Preview menu (right most menu option); if you select 'Configure...' or you open the `.codio` file, you will see how this has been set up.
+
+And you can run your Grunt tasks from a Terminal window
+
+- just enter `grunt` in the console window and your Grunt build task will run.
+- or look in the Run menu (second menu item from the right); if you select 'Configure...' or open the `.codio` file, you will see how this has been set up.
