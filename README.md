@@ -19,7 +19,7 @@ You can run the demo site in the following ways
 
 - Open up `src/index.html` in the file tree and then right click and select 'Preview static'.
 - You can do the same from the `dist` folder.
-- we've also included options in the Preview menu (right most menu option); if you select 'Configure...' or you open the `.codio` file, you will see how this has been set up.
+- We've also included options in the Preview menu (right most menu option); if you select 'Configure...' or you open the `.codio` file, you will see how this has been set up.
 
 And you can run your Grunt tasks from a Terminal window
 

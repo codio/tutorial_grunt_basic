@@ -385,7 +385,7 @@ You can specify more than one `task_name` as shown in this example, where we hav
 
 Now, we can run the following tasks from the command line 
 
-`grunt` (with no second parmater) runs the 'default' registered task 
+`grunt` (with no second parameter) runs the 'default' registered task 
  `grunt prep` runs the 'prep' registered task.
 
 
